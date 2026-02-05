@@ -1,0 +1,30 @@
+services:
+  app:
+    build: ./backend
+    container_name: tts_app
+    env_file:
+      - .env
+    depends_on:
+      - db
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: tts_frontend
+    depends_on:
+      - app
+    restart: always
+
+  db:
+    image: postgres:16
+    container_name: tts_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:
